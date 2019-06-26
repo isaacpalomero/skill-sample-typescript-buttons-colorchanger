@@ -39,22 +39,6 @@
     },
     {
       "type": "npm",
-      "label": "coverage",
-      "script": "coverage",
-      "problemMatcher": []
-    },
-    {
-      "type": "npm",
-      "label": "test",
-      "script": "test",
-      "group": {
-        "kind": "test",
-        "isDefault": true
-      },
-      "problemMatcher": []
-    },
-    {
-      "type": "npm",
       "label": "lint",
       "script": "lint",
       "problemMatcher": [

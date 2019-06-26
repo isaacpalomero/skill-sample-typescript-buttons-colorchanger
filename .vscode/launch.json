@@ -29,17 +29,6 @@
       "outFiles": [
         "${workspaceRoot}/out/build/*.js"
       ]
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "Debug current test",
-      "program": "${workspaceRoot}/node_modules/jest/bin/jest.js",
-      "args": [
-        "--findRelatedTests",
-        "${relativeFile}"
-      ],
-      "cwd": "${workspaceRoot}"
     }
   ]
 }
