@@ -114,3 +114,4 @@ ASK CLI will create the skill and the lambda function for you. The Lambda functi
 ## License
 
 This sample is licensed under the Amazon Software License.
+
