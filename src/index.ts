@@ -15,13 +15,13 @@
 import { RequestHandler, HandlerInput, ErrorHandler, RequestInterceptor, ResponseInterceptor, SkillBuilders, Skill } from "ask-sdk-core";
 import { Response, interfaces, SessionEndedRequest, RequestEnvelope } from "ask-sdk-model";
 // Gadget Directives Builder
-const GadgetDirectives = require('util/gadgetDirectives.js');
+import { GadgetDirectives } from "./util/gadgetDirectives";
 
 // import the skill settings constants
-const Settings = require('settings.js');
+import { Settings } from "./settings";
 
-const RollCall = require('rollcall.js');
-const GamePlay = require('gameplay.js');
+import { RollCall } from "./rollcall";
+import { GamePlay } from "./gameplay";
 
 let skill: Skill;
 
@@ -79,7 +79,7 @@ class HelpIntentHandler implements RequestHandler {
             // if there is an active input handler, stop it so it doesn't interrup Alexa speaking the Help prompt
             // see: https://developer.amazon.com/docs/echo-button-skills/receive-echo-button-events.html#stop
             ctx.directives.push(GadgetDirectives.stopInputHandler({
-                id: sessionAttributes.CurrentInputHandlerID,
+                originatingRequestId: sessionAttributes.CurrentInputHandlerID,
             }));
         }
 

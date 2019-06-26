@@ -12,10 +12,8 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-// Gadget Directives Builder
-const GadgetDirectives = require("util/gadgetDirectives.js");
 // Basic Animation Helper Library
-const BasicAnimations = require("button_animations/basicAnimations.js");
+import { BasicAnimations } from "./button_animations/basicAnimations";
 
 export const Settings = {
     // The skill states are the different parts of the skill.
@@ -44,7 +42,7 @@ export const Settings = {
         green: "184518",
         // map the 'red' selection to a very light blue color to show as a pulsating animation, while waiting for button presses
         red: "603018",
-    },
+    } as { [key: string]: string },
 
     // Define animations to be played on button down and button up that are like the default animations on the buttons
     // We'll use these animations when resetting play state

@@ -16,9 +16,10 @@
 // import the skill settings constants
 import { Settings } from "./settings";
 import { HandlerInput } from "ask-sdk-core";
-const GadgetDirectives = require('util/gadgetDirectives.js');
+import { GadgetDirectives } from "./util/gadgetDirectives";
+import { services } from "ask-sdk-model";
 // Basic Animation Helper Library
-const BasicAnimations = require('button_animations/basicAnimations.js');
+import { BasicAnimations } from "./button_animations/basicAnimations";
 // import the skill settings constants
 
 // Define some animations that we'll use during roll call, to be played in various situations,
@@ -53,7 +54,7 @@ const ROLL_CALL_ANIMATIONS = {
 // (see: https://developer.amazon.com/docs/echo-button-skills/define-echo-button-events.html#proxies)
 // The two recogniziers will be used as triggers for two input handler events, used during roll call.
 // see: https://developer.amazon.com/docs/echo-button-skills/define-echo-button-events.html#recognizers
-const ROLL_CALL_RECOGNIZERS = {
+const ROLL_CALL_RECOGNIZERS: { [key: string]: services.gameEngine.PatternRecognizer } = {
     roll_call_first_button_recognizer: {
         type: "match",
         fuzzy: false,
@@ -84,7 +85,7 @@ const ROLL_CALL_RECOGNIZERS = {
 // to report back to the skill when the first button checks in, when the second button checks in,
 // as well as then the input handler times out, if this happens before two buttons checked in.
 // see: https://developer.amazon.com/docs/echo-button-skills/define-echo-button-events.html#define
-const ROLL_CALL_EVENTS = {
+const ROLL_CALL_EVENTS: { [key: string]: services.gameEngine.Event } = {
     first_button_checked_in: {
         meets: ["roll_call_first_button_recognizer"],
         reports: "matches",
@@ -185,7 +186,7 @@ export const RollCall = {
 
             const fistButtonId = ctx.gameInputEvents[0].gadgetId;
             ctx.directives.push(GadgetDirectives.setIdleAnimation(
-                ROLL_CALL_ANIMATIONS.ButtonCheckInIdle, { targetGadgets: [fistButtonId] }));
+                { ...ROLL_CALL_ANIMATIONS.ButtonCheckInIdle, targetGadgets: [fistButtonId] }));
 
             sessionAttributes.DeviceIDs[1] = fistButtonId;
             sessionAttributes.buttonCount = 1;
@@ -237,7 +238,7 @@ export const RollCall = {
 
         // send an idle animation to registered buttons
         ctx.directives.push(GadgetDirectives.setIdleAnimation(
-            ROLL_CALL_ANIMATIONS.RollCallComplete, { targetGadgets: deviceIds }));
+            { ...ROLL_CALL_ANIMATIONS.RollCallComplete, targetGadgets: deviceIds }));
         // reset button press animations until the user chooses a color
         ctx.directives.push(GadgetDirectives.setButtonDownAnimation(
             Settings.DEFAULT_ANIMATIONS.ButtonDown));
@@ -264,11 +265,11 @@ export const RollCall = {
         deviceIds = deviceIds.slice(-2);
 
         ctx.directives.push(GadgetDirectives.setIdleAnimation(
-            ROLL_CALL_ANIMATIONS.Timeout, { targetGadgets: deviceIds }));
+            { ...ROLL_CALL_ANIMATIONS.Timeout, targetGadgets: deviceIds }));
         ctx.directives.push(GadgetDirectives.setButtonDownAnimation(
-            Settings.DEFAULT_ANIMATIONS.ButtonDown, { targetGadgets: deviceIds }));
+            { ...Settings.DEFAULT_ANIMATIONS.ButtonDown, targetGadgets: deviceIds }));
         ctx.directives.push(GadgetDirectives.setButtonUpAnimation(
-            Settings.DEFAULT_ANIMATIONS.ButtonUp, { targetGadgets: deviceIds }));
+            { ...Settings.DEFAULT_ANIMATIONS.ButtonUp, targetGadgets: deviceIds }));
 
         sessionAttributes.expectingEndSkillConfirmation = true;
 

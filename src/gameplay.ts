@@ -14,27 +14,26 @@
  */
 
 // Gadget Directives Builder
-const GadgetDirectives = require('util/gadgetDirectives.js');
+import { GadgetDirectives } from "./util/gadgetDirectives";
 // Basic Animation Helper Library
-const BasicAnimations = require('button_animations/basicAnimations.js');
+import { BasicAnimations } from "./button_animations/basicAnimations";
 // import the skill settings constants
 import { Settings } from "./settings";
 
 import { HandlerInput } from "ask-sdk-core";
-import { interfaces, IntentRequest } from "ask-sdk-model";
+import { IntentRequest, services } from "ask-sdk-model";
 
 // Define a recognizer for button down events that will match when any button is pressed down.
 // We'll use this recognizer as trigger source for the "button_down_event" during play
 // see: https://developer.amazon.com/docs/echo-button-skills/define-echo-button-events.html#recognizers
-const DIRECT_BUTTON_DOWN_RECOGNIZER = {
+const DIRECT_BUTTON_DOWN_RECOGNIZER: { [key: string]: services.gameEngine.PatternRecognizer } = {
     button_down_recognizer: {
         type: "match",
         fuzzy: false,
         anchor: "end",
         pattern: [{
             action: "down",
-        },
-        ],
+        }],
     },
 };
 
@@ -42,7 +41,7 @@ const DIRECT_BUTTON_DOWN_RECOGNIZER = {
 // to report back to the skill when either of the two buttons in play was pressed and eventually when the
 // input handler times out
 // see: https://developer.amazon.com/docs/echo-button-skills/define-echo-button-events.html#define
-const DIRECT_MODE_EVENTS = {
+const DIRECT_MODE_EVENTS: { [key: string]: services.gameEngine.Event } = {
     button_down_event: {
         meets: ["button_down_recognizer"],
         reports: "matches",
@@ -93,22 +92,10 @@ export const GamePlay = {
             let deviceIds = sessionAttributes.DeviceIDs;
             deviceIds = deviceIds.slice(-2);
 
-            let color: string;
-            switch (uColor) {
-                case "blue":
-                    color = Settings.BREATH_CUSTOM_COLORS.blue;
-                    break;
-                case "green":
-                    color = Settings.BREATH_CUSTOM_COLORS.green;
-                    break;
-                default:
-                    color = Settings.BREATH_CUSTOM_COLORS.red;
-            }
-
             // Build 'idle' breathing animation, based on the users color of choice, that will play immediately
             ctx.directives.push(GadgetDirectives.setIdleAnimation({
                 targetGadgets: deviceIds,
-                animations: BasicAnimations.BreatheAnimation(30, color, 450),
+                animations: BasicAnimations.BreatheAnimation(30, Settings.BREATH_CUSTOM_COLORS[uColor], 450),
             }));
 
             // Build 'button down' animation, based on the users color of choice, for when the button is pressed
@@ -157,9 +144,9 @@ export const GamePlay = {
         }));
         // Reset button animation for skill exit
         ctx.directives.push(GadgetDirectives.setButtonDownAnimation(
-            Settings.DEFAULT_ANIMATIONS.ButtonDown, { targetGadgets: deviceIds }));
+            { ...Settings.DEFAULT_ANIMATIONS.ButtonDown, targetGadgets: deviceIds }));
         ctx.directives.push(GadgetDirectives.setButtonUpAnimation(
-            Settings.DEFAULT_ANIMATIONS.ButtonUp, { targetGadgets: deviceIds }));
+            { ...Settings.DEFAULT_ANIMATIONS.ButtonUp, targetGadgets: deviceIds }));
 
         // Set Skill End flag
         sessionAttributes.expectingEndSkillConfirmation = true;
@@ -180,7 +167,7 @@ export const GamePlay = {
         const buttonId = gameInputEvents[0].gadgetId;
 
         // Checks for Invalid Button ID
-        if (deviceIds.indexOf(buttonId) == -1) {
+        if (deviceIds.indexOf(buttonId) === -1) {
             console.log("Button event received for unregisterd gadget.");
             // Don't send any directives back to Alexa for invalid Button ID Events
             ctx.outputSpeech = ["Unregistered button"];
