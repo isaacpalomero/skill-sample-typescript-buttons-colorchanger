@@ -12,54 +12,51 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-
-'use strict';
-
 // Gadget Directives Builder
-const GadgetDirectives = require('util/gadgetDirectives.js');
+const GadgetDirectives = require("util/gadgetDirectives.js");
 // Basic Animation Helper Library
-const BasicAnimations = require('button_animations/basicAnimations.js');
+const BasicAnimations = require("button_animations/basicAnimations.js");
 
-module.exports = {
+export const Settings = {
     // The skill states are the different parts of the skill.
     SKILL_STATES: {
         // Roll Call mode performs roll call and button registration.
         // https://developer.amazon.com/docs/echo-button-skills/discover-echo-buttons.html
-        ROLL_CALL_MODE: '',
-        PLAY_MODE: '_PLAY_MODE',
+        ROLL_CALL_MODE: "",
+        PLAY_MODE: "_PLAY_MODE",
         // Exit mode performs the actions described in
         // https://developer.amazon.com/docs/echo-button-skills/exit-echo-button-skill.html
-        EXIT_MODE: '_EXIT_MODE'
+        EXIT_MODE: "_EXIT_MODE",
     },
 
     // We'll use an audio sample of a ticking clock to play whenever the skill is waiting for button presses
     // This is an audio file from the ASK Soundbank: https://developer.amazon.com/docs/custom-skills/foley-sounds.html
-    WAITING_AUDIO: '<audio src="https://s3.amazonaws.com/ask-soundlibrary/foley/amzn_sfx_rhythmic_ticking_30s_01.mp3"/>',
+    WAITING_AUDIO: "<audio src=\"https://s3.amazonaws.com/ask-soundlibrary/foley/amzn_sfx_rhythmic_ticking_30s_01.mp3\"/>",
 
     // The following are going to be the colors we allow in the skill
-    COLORS_ALLOWED: [ 'blue', 'green', 'red' ],
+    COLORS_ALLOWED: ["blue", "green", "red"],
 
     // We'll set up a map of custom colors to each of the three allowed colord: blue, green and red
-    BREATH_CUSTOM_COLORS: { 
+    BREATH_CUSTOM_COLORS: {
         // map the 'blue' selection to a very light blue color to show as a pulsating animation, while waiting for button presses
-        'blue': '184066',
+        blue: "184066",
         // map the 'green' selection to a very light blue color to show as a pulsating animation, while waiting for button presses
-        'green': '184518',
+        green: "184518",
         // map the 'red' selection to a very light blue color to show as a pulsating animation, while waiting for button presses
-        'red': '603018'
+        red: "603018",
     },
 
     // Define animations to be played on button down and button up that are like the default animations on the buttons
     // We'll use these animations when resetting play state
     // See: https://developer.amazon.com/docs/echo-button-skills/control-echo-buttons.html#animate
     DEFAULT_ANIMATIONS: {
-        'ButtonDown' : {
-            'targetGadgets': [],
-            'animations': BasicAnimations.FadeOutAnimation(1, 'blue', 200)
+        ButtonDown: {
+            targetGadgets: [],
+            animations: BasicAnimations.FadeOutAnimation(1, "blue", 200),
         },
-        'ButtonUp': {                     
-            'targetGadgets': [], 
-            'animations': BasicAnimations.SolidAnimation(1, 'black', 100)
-        }
-    }
+        ButtonUp: {
+            targetGadgets: [],
+            animations: BasicAnimations.SolidAnimation(1, "black", 100),
+        },
+    },
 };

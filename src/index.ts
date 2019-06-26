@@ -16,8 +16,7 @@ import { RequestHandler, HandlerInput, ErrorHandler, RequestInterceptor, Respons
 import { Response, interfaces, SessionEndedRequest, RequestEnvelope } from "ask-sdk-model";
 // Gadget Directives Builder
 const GadgetDirectives = require('util/gadgetDirectives.js');
-// Basic Animation Helper Library
-const BasicAnimations = require('button_animations/basicAnimations.js');
+
 // import the skill settings constants
 const Settings = require('settings.js');
 
